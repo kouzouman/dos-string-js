@@ -1,6 +1,6 @@
 {
   "name": "dos-string-js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Prototype extension for javascript String type.",
   "main": "index.js",
   "repository": "https://github.com/kouzouman/dos-string-js.git",
