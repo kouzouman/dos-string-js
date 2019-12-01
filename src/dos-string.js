@@ -192,9 +192,7 @@ DosCommon.extendMethod(Date, 'toString', function(format, is12hours) {
   var replaceStr = '(' + Object.keys(replaceStrArray).join('|') + ')'
   var regex = new RegExp(replaceStr, 'g')
 
-  ret = format.replace(regex, function(str) {
+  return format.replace(regex, function(str) {
     return replaceStrArray[str]
   })
-
-  return ret
 })
