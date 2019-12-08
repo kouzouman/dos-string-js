@@ -95,6 +95,20 @@ _dosCommonJs.default.extendMethod(String, 'splitNewLine', function (needEmpty = 
   return needEmpty ? lines : lines.filter(v => v != '');
 });
 /**
+ * チャンクごとに区分けする
+ */
+
+
+_dosCommonJs.default.extendMethod(String, 'chunk', function (length) {
+  let result = [];
+
+  for (let i = 0; i < this.length / length + 1; i++) {
+    result.push(this.substr(i * length, length));
+  }
+
+  return result;
+});
+/**
  * スネークケースをキャメルケースに変換
  */
 

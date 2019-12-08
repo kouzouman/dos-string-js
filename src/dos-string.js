@@ -97,6 +97,17 @@ DosCommon.extendMethod(String, 'splitNewLine', function(needEmpty = false) {
 })
 
 /**
+ * チャンクごとに区分けする
+ */
+DosCommon.extendMethod(String, 'chunk', function(length) {
+  let result = []
+  for (let i = 0; i < this.length / length + 1; i++) {
+    result.push(this.substr(i * length, length))
+  }
+  return result
+})
+
+/**
  * スネークケースをキャメルケースに変換
  */
 DosCommon.extendMethod(String, 'snakeToCamel', function() {
