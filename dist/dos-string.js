@@ -103,7 +103,8 @@ _dosCommonJs.default.extendMethod(String, 'chunk', function (length) {
   let result = [];
 
   for (let i = 0; i < this.length / length + 1; i++) {
-    result.push(this.substr(i * length, length));
+    const str = this.substr(i * length, length);
+    if (!str) result.push(str);
   }
 
   return result;
