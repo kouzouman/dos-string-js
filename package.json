@@ -1,13 +1,13 @@
 {
   "name": "dos-string-js",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Prototype extension for javascript String type.",
   "main": "index.js",
   "repository": "https://github.com/kouzouman/dos-string-js.git",
   "author": "kouzouman <check@doers-square.com>",
   "license": "MIT",
   "dependencies": {
-    "dos-common-js": "0.1.0",
+    "dos-common-js": "0.2.0",
     "moment": "^2.24.0"
   },
   "devDependencies": {
