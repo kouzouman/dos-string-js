@@ -128,6 +128,18 @@ _dosCommonJs.default.extendMethod(String, 'camelToSnake', function () {
   });
 });
 /**
+ * 指定の位置に文字列を挿入する
+ * indexがマイナス値の場合後ろに入れる
+ */
+
+
+_dosCommonJs.default.extendMethod(String, 'insertStr', function (str, index) {
+  const insertIndex = index >= 0 ? index : this.length + index + 1;
+  const front = this.slice(0, insertIndex);
+  const back = this.slice(insertIndex);
+  return front + str + back;
+});
+/**
  * String拡張
  * 文字列を整数値に変換して返す
  * @return {Number} [description]

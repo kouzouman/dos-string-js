@@ -7,7 +7,7 @@ import Moment from 'moment'
  * 引数の文字列がnull、または空文字の時true
  * @param {*string} str 対象の文字列
  */
-String.isEmpty = function(str) {
+String.isEmpty = function (str) {
   return (
     typeof str === 'undefined' ||
     str === null ||
@@ -18,28 +18,28 @@ String.isEmpty = function(str) {
 /**
  * 空文字の場合trueを返す
  */
-DosCommon.extendMethod(String, 'isEmpty', function() {
+DosCommon.extendMethod(String, 'isEmpty', function () {
   return this === ''
 })
 
 /**
  * 数値型を数値型にして出力（変更なし）
  */
-DosCommon.extendMethod(String, 'toNumber', function() {
+DosCommon.extendMethod(String, 'toNumber', function () {
   return this - 0
 })
 
 /**
  * 数値型を日付型にして出力（変更なし）
  */
-DosCommon.extendMethod(String, 'toDate', function() {
+DosCommon.extendMethod(String, 'toDate', function () {
   return new Moment(this)
 })
 
 /**
  * 正規表現でMatch確認
  */
-DosCommon.extendMethod(String, 'isRegExMatch', function(reg) {
+DosCommon.extendMethod(String, 'isRegExMatch', function (reg) {
   let re = new RegExp(reg, 'i')
   if (re.exec(this.substr(0))) {
     return true
@@ -48,7 +48,7 @@ DosCommon.extendMethod(String, 'isRegExMatch', function(reg) {
 })
 
 //  先頭から指定の文字列まで削除する
-DosCommon.extendMethod(String, 'deleteFromStart', function(
+DosCommon.extendMethod(String, 'deleteFromStart', function (
   target,
   isFirst = true,
   isDelete = true
@@ -62,7 +62,7 @@ DosCommon.extendMethod(String, 'deleteFromStart', function(
 })
 
 //  終端から指定の文字列まで削除する
-DosCommon.extendMethod(String, 'deleteFromEnd', function(
+DosCommon.extendMethod(String, 'deleteFromEnd', function (
   target,
   isFirst = true,
   isDelete = true
@@ -81,7 +81,7 @@ DosCommon.extendMethod(String, 'deleteFromEnd', function(
  * @param  {[type]} replace [description]
  * @return {[type]}         [description]
  */
-DosCommon.extendMethod(String, 'replaceAll', function(target, replace) {
+DosCommon.extendMethod(String, 'replaceAll', function (target, replace) {
   return this.split(target).join(replace)
 })
 
@@ -90,16 +90,16 @@ DosCommon.extendMethod(String, 'replaceAll', function(target, replace) {
  * @param  {Bool} needEmpty  空文字を配列に含める場合True
  * @return {Array} split結果
  */
-DosCommon.extendMethod(String, 'splitNewLine', function(needEmpty = false) {
+DosCommon.extendMethod(String, 'splitNewLine', function (needEmpty = false) {
   const target = this.replaceAll('\r\n', '\n')
   const lines = target.split('\n')
-  return needEmpty ? lines : lines.filter(v => v != '')
+  return needEmpty ? lines : lines.filter((v) => v != '')
 })
 
 /**
  * チャンクごとに区分けする
  */
-DosCommon.extendMethod(String, 'chunk', function(length) {
+DosCommon.extendMethod(String, 'chunk', function (length) {
   let result = []
   for (let i = 0; i < this.length / length + 1; i++) {
     const str = this.substr(i * length, length)
@@ -111,18 +111,30 @@ DosCommon.extendMethod(String, 'chunk', function(length) {
 /**
  * スネークケースをキャメルケースに変換
  */
-DosCommon.extendMethod(String, 'snakeToCamel', function() {
+DosCommon.extendMethod(String, 'snakeToCamel', function () {
   //_+小文字を大文字にする(例:_a を A)
-  return this.toLowerCase().replace(/_./g, function(s) {
+  return this.toLowerCase().replace(/_./g, function (s) {
     return s.charAt(1).toUpperCase()
   })
 })
 
-DosCommon.extendMethod(String, 'camelToSnake', function() {
+DosCommon.extendMethod(String, 'camelToSnake', function () {
   //大文字を_+小文字にする(例:A を _a)
-  return p.replace(/([A-Z])/g, function(s) {
+  return p.replace(/([A-Z])/g, function (s) {
     return '_' + s.charAt(0).toLowerCase()
   })
+})
+
+/**
+ * 指定の位置に文字列を挿入する
+ * indexがマイナス値の場合後ろに入れる
+ */
+DosCommon.extendMethod(String, 'insertStr', function (str, index) {
+  const insertIndex = index >= 0 ? index : this.length + index + 1
+
+  const front = this.slice(0, insertIndex)
+  const back = this.slice(insertIndex)
+  return front + str + back
 })
 
 /**
@@ -130,7 +142,7 @@ DosCommon.extendMethod(String, 'camelToSnake', function() {
  * 文字列を整数値に変換して返す
  * @return {Number} [description]
  */
-DosCommon.extendMethod(String, 'toInt', function() {
+DosCommon.extendMethod(String, 'toInt', function () {
   var intValue = parseInt(this, 10)
   if (/*isNaN(intValue) の精密版*/ intValue !== intValue) return 0
   return intValue
@@ -141,7 +153,7 @@ DosCommon.extendMethod(String, 'toInt', function() {
  * 文字列を実数値に変換して返す
  * @return {Number} [description]
  */
-DosCommon.extendMethod(String, 'toFloat', function() {
+DosCommon.extendMethod(String, 'toFloat', function () {
   try {
     var realValue = parseFloat(this)
     return realValue
@@ -156,21 +168,13 @@ DosCommon.extendMethod(String, 'toFloat', function() {
  * 数値を3桁ごとに，を打つ記法の文字列に変換
  * @return {Integer} 3桁ごとに，を打った数値の文字列
  */
-DosCommon.extendMethod(String, 'toCommaPrice', function() {
+DosCommon.extendMethod(String, 'toCommaPrice', function () {
   var targets = this.split('.')
   if (targets.length == 1)
-    return targets[0]
-      .replaceAll(',', '')
-      .toInt()
-      .toCommaPrice()
+    return targets[0].replaceAll(',', '').toInt().toCommaPrice()
   else
     return (
-      targets[0]
-        .replaceAll(',', '')
-        .toInt()
-        .toCommaPrice() +
-      '.' +
-      targets[1]
+      targets[0].replaceAll(',', '').toInt().toCommaPrice() + '.' + targets[1]
     )
 })
 
@@ -179,7 +183,7 @@ DosCommon.extendMethod(String, 'toCommaPrice', function() {
  * 文字列を半角に変換する
  * @return {String} 変換後の文字列
  */
-DosCommon.extendMethod(String, 'toHankaku', function(Unconvertible2Char) {
+DosCommon.extendMethod(String, 'toHankaku', function (Unconvertible2Char) {
   var str = this
   var returnString = ''
   var s
@@ -204,7 +208,7 @@ DosCommon.extendMethod(String, 'toHankaku', function(Unconvertible2Char) {
  * 文字列を全角に変換する
  * @return {String} 変換後の文字列
  */
-DosCommon.extendMethod(String, 'toZenkaku', function() {
+DosCommon.extendMethod(String, 'toZenkaku', function () {
   var str = this
   var returnString = ''
   var s
@@ -240,7 +244,7 @@ DosCommon.extendMethod(String, 'toZenkaku', function() {
  * @param  {Boolean} decimalZero decimalDigit桁分0を埋めるかどうか
  * @return {String}              値を精査した文字列
  */
-DosCommon.extendMethod(String, 'changeDecimal', function(
+DosCommon.extendMethod(String, 'changeDecimal', function (
   integerDigit,
   decimalDigit,
   decimalZero
@@ -248,14 +252,12 @@ DosCommon.extendMethod(String, 'changeDecimal', function(
   // console.log("aaa");
   if (this == '') return ''
 
-  var target = this.toHankaku()
-    .toFloat()
-    .toString()
+  var target = this.toHankaku().toFloat().toString()
   if (target == 'NaN') return ''
   var divNum = target.split('.')
   //  最大に0が追加された場合の0の文字列
   var decimalZeroMax = decimalDigit
-    .times(function() {
+    .times(function () {
       return 0
     })
     .join('')
@@ -292,7 +294,7 @@ DosCommon.extendMethod(String, 'changeDecimal', function(
  * 自身の文字列からhtmlエスケープをもとに戻す
  * @return {String}         生のHTML
  */
-DosCommon.extendMethod(String, 'unescapeHTML', function() {
+DosCommon.extendMethod(String, 'unescapeHTML', function () {
   var div = document.createElement('div')
   div.innerHTML = this.replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -307,7 +309,7 @@ DosCommon.extendMethod(String, 'unescapeHTML', function() {
  * @param  {Bool} needEmpty  空文字を配列に含める場合True
  * @return {Array} split結果
  */
-DosCommon.extendMethod(String, 'csvSplit', function(
+DosCommon.extendMethod(String, 'csvSplit', function (
   strDelimiter = ',',
   needEmpty = false
 ) {
@@ -342,7 +344,7 @@ DosCommon.extendMethod(String, 'csvSplit', function(
   return arrData
 })
 
-DosCommon.extendMethod(Date, 'toString', function(format, is12hours) {
+DosCommon.extendMethod(Date, 'toString', function (format, is12hours) {
   var weekday = ['日', '月', '火', '水', '木', '金', '土']
   if (!format) {
     format = 'YYYY/MM/DD(WW) hh:mm:dd'
@@ -375,13 +377,13 @@ DosCommon.extendMethod(Date, 'toString', function(format, is12hours) {
     m: minutes,
     ss: ('0' + secounds).slice(-2),
     s: secounds,
-    AP: ampm
+    AP: ampm,
   }
 
   var replaceStr = '(' + Object.keys(replaceStrArray).join('|') + ')'
   var regex = new RegExp(replaceStr, 'g')
 
-  return format.replace(regex, function(str) {
+  return format.replace(regex, function (str) {
     return replaceStrArray[str]
   })
 })
