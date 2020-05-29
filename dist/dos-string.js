@@ -182,6 +182,17 @@ _dosCommonJs.default.extendMethod(String, 'toCommaPrice', function () {
 });
 /**
  * String拡張
+ * 文字列のバイト数を取得
+ * @return {Integer} 文字列のバイト数
+ */
+
+
+_dosCommonJs.default.extendMethod(String, 'byteLength', function () {
+  const str = !this ? '' : this;
+  return encodeURI(str).replace(/%../g, '*').length;
+});
+/**
+ * String拡張
  * 文字列を半角に変換する
  * @return {String} 変換後の文字列
  */
@@ -198,7 +209,7 @@ _dosCommonJs.default.extendMethod(String, 'toHankaku', function (Unconvertible2C
     } else if (s = kH[str.charAt(i)]) {
       returnString += kH[str.charAt(i)];
     } else {
-      if (!!Unconvertible2Char && getByteLength(str.charAt(i)) >= 2) {
+      if (!!Unconvertible2Char && str.charAt(i).byteLength() >= 2) {
         returnString += Unconvertible2Char;
       } else {
         returnString += str.charAt(i);
@@ -228,7 +239,7 @@ _dosCommonJs.default.extendMethod(String, 'toZenkaku', function () {
       if (s = kZ[str.charAt(i)]) {
         returnString += kZ[str.charAt(i)];
       } else {
-        if (getByteLength(str.charAt(i)) >= 2) {
+        if (str.charAt(i).byteLength() >= 2) {
           returnString += str.charAt(i);
         } else {
           returnString += str.charAt(i);
@@ -379,7 +390,7 @@ var kH = new Object(); // Objectの生成
 
 var kHACOS = new Object(); // Objectの生成(ACOS用小)
 
-var han = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ';
+var han = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ';
 han += 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔｲﾕｴﾖﾗﾘﾙﾚﾛﾜｦﾝｧｨｩｪｫｬｭｮｯﾞﾟｰ､｡･ﾞﾟ､｡｢｣｢｣[]()/*-ｰ+,.:;!"#$%&\'=~|^\\@`{}<>?･_ ';
 var zen = '０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ';
 zen += 'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔｲﾕｴﾖﾗﾘﾙﾚﾛﾜｦﾝｧｨｩｪｫｬｭｮｯﾞﾟｰ､｡･゛゜、。｢｣「」［］（）／＊－ー＋，．：；！”＃＄％＆’＝～｜＾￥＠‘｛｝＜＞？・＿  ';

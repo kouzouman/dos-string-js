@@ -20,3 +20,12 @@ test('chunk', () => {
   expect(cc[3]).toBe('90')
   expect(!cc[4]).toBe(true)
 })
+
+/**
+ *　半角変換
+ */
+test('tohankaku', () => {
+  const str = 'abcａｂｃアイウｴｵｶ123４５６'
+  expect(str.toHankaku()).toBe('abcabcｱｲｳｴｵｶ123456')
+  expect(str.toZenkaku()).toBe('ａｂｃａｂｃアイウエオカ１２３４５６')
+})
