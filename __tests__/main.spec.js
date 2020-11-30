@@ -29,3 +29,38 @@ test('tohankaku', () => {
   expect(str.toHankaku()).toBe('abcabcｱｲｳｴｵｶ123456')
   expect(str.toZenkaku()).toBe('ａｂｃａｂｃアイウエオカ１２３４５６')
 })
+
+/**
+ *  数値確認
+ */
+test('isNum', () => {
+  expect('123'.isNum()).toBe(true)
+  expect('123a'.isNum()).toBe(false)
+  expect('12.13'.isNum()).toBe(true)
+  expect('afda'.isNum()).toBe(false)
+  expect('あｆ'.isNum()).toBe(false)
+  expect('ｇ＆Ｊ％ＷＨＴＧＡＥ'.isNum()).toBe(false)
+})
+
+/**
+ *  数値確認
+ */
+test('isNum', () => {
+  const str = 'abcａｂｃアイウｴｵｶ123４５６'
+  expect('123'.isNum()).toBe(true)
+  expect('123a'.isNum()).toBe(false)
+  expect('12.13'.isNum()).toBe(true)
+  expect('afda'.isNum()).toBe(false)
+  expect('あｆ'.isNum()).toBe(false)
+  expect('ｇ＆Ｊ％ＷＨＴＧＡＥ'.isNum()).toBe(false)
+})
+
+/**
+ *  数値確認
+ */
+test('changeDecimal', () => {
+  const str = 'abcａｂｃアイウｴｵｶ123４５６'
+  console.log('-----------------------')
+  console.log('123'.changeDecimal(4, 4, true))
+  expect('123'.changeDecimal(4, 4, true)).toBe('123.0000')
+})

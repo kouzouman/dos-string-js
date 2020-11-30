@@ -1,5 +1,6 @@
 import DosCommon from 'dos-common-js'
 import Moment from 'moment'
+require('dos-number-js')
 
 // console.log(DosCommon.extendMethod)
 
@@ -26,6 +27,7 @@ DosCommon.extendMethod(String, 'isEmpty', function () {
  * 数値型を数値型にして出力（変更なし）
  */
 DosCommon.extendMethod(String, 'toNumber', function () {
+  console.log('String:toNumberは、非推奨　とtoInt/toFloatを使用')
   return this - 0
 })
 
@@ -40,7 +42,7 @@ DosCommon.extendMethod(String, 'toDate', function () {
  * 正規表現でMatch確認
  */
 DosCommon.extendMethod(String, 'isRegExMatch', function (reg) {
-  let re = new RegExp(reg, 'i')
+  const re = new RegExp(reg, 'i')
   if (re.exec(this.substr(0))) {
     return true
   }
@@ -48,32 +50,32 @@ DosCommon.extendMethod(String, 'isRegExMatch', function (reg) {
 })
 
 //  先頭から指定の文字列まで削除する
-DosCommon.extendMethod(String, 'deleteFromStart', function (
-  target,
-  isFirst = true,
-  isDelete = true
-) {
-  let index = isFirst ? this.indexOf(target) : this.lastIndexOf(target)
-  if (index == -1) return this
+DosCommon.extendMethod(
+  String,
+  'deleteFromStart',
+  function (target, isFirst = true, isDelete = true) {
+    const index = isFirst ? this.indexOf(target) : this.lastIndexOf(target)
+    if (index == -1) return this
 
-  let result = this.substr(index + target.length)
-  if (!isDelete) result = target + result
-  return result
-})
+    let result = this.substr(index + target.length)
+    if (!isDelete) result = target + result
+    return result
+  }
+)
 
 //  終端から指定の文字列まで削除する
-DosCommon.extendMethod(String, 'deleteFromEnd', function (
-  target,
-  isFirst = true,
-  isDelete = true
-) {
-  let index = !isFirst ? this.indexOf(target) : this.lastIndexOf(target)
-  if (index == -1) return this.substr(0)
+DosCommon.extendMethod(
+  String,
+  'deleteFromEnd',
+  function (target, isFirst = true, isDelete = true) {
+    const index = !isFirst ? this.indexOf(target) : this.lastIndexOf(target)
+    if (index == -1) return this.substr(0)
 
-  let result = this.substr(0, index)
-  if (!isDelete) result = result + target
-  return result
-})
+    let result = this.substr(0, index)
+    if (!isDelete) result = result + target
+    return result
+  }
+)
 
 /**
  * 先頭から最後まですべてReplaceする
@@ -100,7 +102,7 @@ DosCommon.extendMethod(String, 'splitNewLine', function (needEmpty = false) {
  * チャンクごとに区分けする
  */
 DosCommon.extendMethod(String, 'chunk', function (length) {
-  let result = []
+  const result = []
   for (let i = 0; i < this.length / length + 1; i++) {
     const str = this.substr(i * length, length)
     if (!!str) result.push(str)
@@ -142,10 +144,21 @@ DosCommon.extendMethod(String, 'insertStr', function (str, index) {
  * 文字列を整数値に変換して返す
  * @return {Number} [description]
  */
+DosCommon.extendMethod(String, 'isNum', function () {
+  const num = this.toFloat()
+  return num == null ? false : true
+})
+
+/**
+ * String拡張
+ * 文字列を整数値に変換して返す
+ * @return {Number} [description]
+ */
 DosCommon.extendMethod(String, 'toInt', function () {
-  var intValue = parseInt(this, 10)
+  const intValue = parseInt(this, 10)
   if (/*isNaN(intValue) の精密版*/ intValue !== intValue) return 0
-  return intValue
+  if (intValue === this - 0) return intValue
+  return null
 })
 
 /**
@@ -155,8 +168,10 @@ DosCommon.extendMethod(String, 'toInt', function () {
  */
 DosCommon.extendMethod(String, 'toFloat', function () {
   try {
-    var realValue = parseFloat(this)
-    return realValue
+    const realValue = parseFloat(this)
+    if (/*isNaN(intValue) の精密版*/ realValue !== realValue) return null
+    if (realValue === this - 0) return realValue
+    return null
   } catch (e) {
     console.error(e)
     return null
@@ -169,7 +184,7 @@ DosCommon.extendMethod(String, 'toFloat', function () {
  * @return {Integer} 3桁ごとに，を打った数値の文字列
  */
 DosCommon.extendMethod(String, 'toCommaPrice', function () {
-  var targets = this.split('.')
+  const targets = this.split('.')
   if (targets.length == 1)
     return targets[0].replaceAll(',', '').toInt().toCommaPrice()
   else
@@ -194,10 +209,10 @@ DosCommon.extendMethod(String, 'byteLength', function () {
  * @return {String} 変換後の文字列
  */
 DosCommon.extendMethod(String, 'toHankaku', function (Unconvertible2Char) {
-  var str = this
-  var returnString = ''
-  var s
-  for (i = 0; i < str.length; i++) {
+  const str = this
+  let returnString = ''
+  let s
+  for (let i = 0; i < str.length; i++) {
     if ((s = kHACOS[str.charAt(i)])) {
       returnString += kHACOS[str.charAt(i)]
     } else if ((s = kH[str.charAt(i)])) {
@@ -219,10 +234,10 @@ DosCommon.extendMethod(String, 'toHankaku', function (Unconvertible2Char) {
  * @return {String} 変換後の文字列
  */
 DosCommon.extendMethod(String, 'toZenkaku', function () {
-  var str = this
-  var returnString = ''
-  var s
-  for (i = 0; i < str.length; i++) {
+  const str = this
+  let returnString = ''
+  let s
+  for (let i = 0; i < str.length; i++) {
     if (
       (str.charAt(i + 1) == 'ﾞ' || str.charAt(i + 1) == 'ﾟ') &&
       kZ[str.charAt(i) + str.charAt(i + 1)] != null &&
@@ -254,50 +269,52 @@ DosCommon.extendMethod(String, 'toZenkaku', function () {
  * @param  {Boolean} decimalZero decimalDigit桁分0を埋めるかどうか
  * @return {String}              値を精査した文字列
  */
-DosCommon.extendMethod(String, 'changeDecimal', function (
-  integerDigit,
-  decimalDigit,
-  decimalZero
-) {
-  // console.log("aaa");
-  if (this == '') return ''
+DosCommon.extendMethod(
+  String,
+  'changeDecimal',
+  function (integerDigit, decimalDigit, decimalZero) {
+    // console.log("aaa");
+    if (this == '') return ''
 
-  var target = this.toHankaku().toFloat().toString()
-  if (target == 'NaN') return ''
-  var divNum = target.split('.')
-  //  最大に0が追加された場合の0の文字列
-  var decimalZeroMax = decimalDigit
-    .times(function () {
-      return 0
-    })
-    .join('')
+    const target = this.toHankaku().toFloat().toString()
+    if (target == 'NaN') return ''
+    const divNum = target.split('.')
+    //  最大に0が追加された場合の0の文字列
+    const decimalZeroMax = decimalDigit
+      .times(function () {
+        return 0
+      })
+      .join('')
 
-  //  小数点が多い場合は終了
-  if (divNum.length > 2) return ''
+    //  小数点が多い場合は終了
+    if (divNum.length > 2) return ''
 
-  //  整数部のみの値ですべて数値要素の場合
-  if (divNum.length == 1 && target.toInt().toString().length == target.length) {
-    //  0埋めを行う場合
-    if (decimalZero)
-      return (
-        target.substring(0, integerDigit) +
-        (decimalZeroMax == '' ? '' : '.' + decimalZeroMax)
-      )
-    //  0梅を行わない場合
-    else return target.substring(0, integerDigit)
+    //  整数部のみの値ですべて数値要素の場合
+    if (
+      divNum.length == 1 &&
+      target.toInt().toString().length == target.length
+    ) {
+      //  0埋めを行う場合
+      if (decimalZero)
+        return (
+          target.substring(0, integerDigit) +
+          (decimalZeroMax == '' ? '' : '.' + decimalZeroMax)
+        )
+      //  0梅を行わない場合
+      else return target.substring(0, integerDigit)
+    }
+
+    //  整数部と小数部がある場合
+    if (target.toInt().toString().length == target.length) {
+    }
+
+    const integerNum = divNum[0].substring(0, integerDigit)
+    const decimalNum = (
+      divNum[1] + (decimalZero ? decimalZeroMax : '')
+    ).substring(0, decimalDigit)
+    return integerNum + (decimalNum == '' ? '' : '.' + decimalNum)
   }
-
-  //  整数部と小数部がある場合
-  if (target.toInt().toString().length == target.length) {
-  }
-
-  var integerNum = divNum[0].substring(0, integerDigit)
-  var decimalNum = (divNum[1] + (decimalZero ? decimalZeroMax : '')).substring(
-    0,
-    decimalDigit
-  )
-  return integerNum + (decimalNum == '' ? '' : '.' + decimalNum)
-})
+)
 
 /**
  * String拡張
@@ -305,7 +322,7 @@ DosCommon.extendMethod(String, 'changeDecimal', function (
  * @return {String}         生のHTML
  */
 DosCommon.extendMethod(String, 'unescapeHTML', function () {
-  var div = document.createElement('div')
+  const div = document.createElement('div')
   div.innerHTML = this.replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/ /g, '&nbsp;')
@@ -319,61 +336,62 @@ DosCommon.extendMethod(String, 'unescapeHTML', function () {
  * @param  {Bool} needEmpty  空文字を配列に含める場合True
  * @return {Array} split結果
  */
-DosCommon.extendMethod(String, 'csvSplit', function (
-  strDelimiter = ',',
-  needEmpty = false
-) {
-  var strData = this
-  strDelimiter = strDelimiter || ','
-  var objPattern = new RegExp(
-    '(\\' +
-      strDelimiter +
-      '|\\r?\\n|\\r|^)' +
-      '(?:"([^"]*(?:""[^"]*)*)"|' +
-      '([^"\\' +
-      strDelimiter +
-      '\\r\\n]*))',
-    'gi'
-  )
-  var arrData = [[]]
-  var arrMatches = null
-  while ((arrMatches = objPattern.exec(strData))) {
-    var strMatchedDelimiter = arrMatches[1]
-    if (strMatchedDelimiter.length && strMatchedDelimiter != strDelimiter) {
-      if (arrData[arrData.length - 1].length != 0) {
-        arrData.push([])
+DosCommon.extendMethod(
+  String,
+  'csvSplit',
+  function (strDelimiter = ',', needEmpty = false) {
+    const strData = this
+    strDelimiter = strDelimiter || ','
+    const objPattern = new RegExp(
+      '(\\' +
+        strDelimiter +
+        '|\\r?\\n|\\r|^)' +
+        '(?:"([^"]*(?:""[^"]*)*)"|' +
+        '([^"\\' +
+        strDelimiter +
+        '\\r\\n]*))',
+      'gi'
+    )
+    const arrData = [[]]
+    let arrMatches = null
+    while ((arrMatches = objPattern.exec(strData))) {
+      const strMatchedDelimiter = arrMatches[1]
+      if (strMatchedDelimiter.length && strMatchedDelimiter != strDelimiter) {
+        if (arrData[arrData.length - 1].length != 0) {
+          arrData.push([])
+        }
       }
+      if (arrMatches[2]) {
+        var strMatchedValue = arrMatches[2].replace(new RegExp('""', 'g'), '"')
+      } else {
+        var strMatchedValue = arrMatches[3]
+      }
+      arrData[arrData.length - 1].push(strMatchedValue)
     }
-    if (arrMatches[2]) {
-      var strMatchedValue = arrMatches[2].replace(new RegExp('""', 'g'), '"')
-    } else {
-      var strMatchedValue = arrMatches[3]
-    }
-    arrData[arrData.length - 1].push(strMatchedValue)
+    return arrData
   }
-  return arrData
-})
+)
 
 DosCommon.extendMethod(Date, 'toString', function (format, is12hours) {
-  var weekday = ['日', '月', '火', '水', '木', '金', '土']
+  const weekdayArray = ['日', '月', '火', '水', '木', '金', '土']
   if (!format) {
     format = 'YYYY/MM/DD(WW) hh:mm:dd'
   }
-  var year = this.getFullYear()
-  var month = this.getMonth() + 1
-  var day = this.getDate()
-  var weekday = weekday[this.getDay()]
-  var hours = this.getHours()
-  var minutes = this.getMinutes()
-  var secounds = this.getSeconds()
+  const year = this.getFullYear()
+  const month = this.getMonth() + 1
+  const day = this.getDate()
+  const weekday = weekdayArray[this.getDay()]
+  const hours = this.getHours()
+  const minutes = this.getMinutes()
+  const secounds = this.getSeconds()
 
-  var ampm = hours < 12 ? 'AM' : 'PM'
+  const ampm = hours < 12 ? 'AM' : 'PM'
   if (is12hours) {
     hours = hours % 12
     hours = hours != 0 ? hours : 12 // 0時は12時と表示する
   }
 
-  var replaceStrArray = {
+  const replaceStrArray = {
     YYYY: year,
     Y: year,
     MM: ('0' + month).slice(-2),
@@ -390,8 +408,8 @@ DosCommon.extendMethod(Date, 'toString', function (format, is12hours) {
     AP: ampm,
   }
 
-  var replaceStr = '(' + Object.keys(replaceStrArray).join('|') + ')'
-  var regex = new RegExp(replaceStr, 'g')
+  const replaceStr = '(' + Object.keys(replaceStrArray).join('|') + ')'
+  const regex = new RegExp(replaceStr, 'g')
 
   return format.replace(regex, function (str) {
     return replaceStrArray[str]
@@ -406,20 +424,20 @@ DosCommon.extendMethod(Date, 'toString', function (format, is12hours) {
                               全角英数・カナ・かなを半角に変換 toHankaku(str)
                               ※ACOS対応 ｧｨｩｪｫｬｭｮｯ は ｱｲｳｴｵﾔﾕﾖﾂに変換
                             */
-var kH = new Object() // Objectの生成
+let kH = new Object() // Objectの生成
 
-var kHACOS = new Object() // Objectの生成(ACOS用小)
+let kHACOS = new Object() // Objectの生成(ACOS用小)
 
-var han =
+let han =
   '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ'
 han +=
   'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔｲﾕｴﾖﾗﾘﾙﾚﾛﾜｦﾝｧｨｩｪｫｬｭｮｯﾞﾟｰ､｡･ﾞﾟ､｡｢｣｢｣[]()/*-ｰ+,.:;!"#$%&\'=~|^\\@`{}<>?･_ '
 
-var zen =
+let zen =
   '０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ'
 zen +=
   'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔｲﾕｴﾖﾗﾘﾙﾚﾛﾜｦﾝｧｨｩｪｫｬｭｮｯﾞﾟｰ､｡･゛゜、。｢｣「」［］（）／＊－ー＋，．：；！”＃＄％＆’＝～｜＾￥＠‘｛｝＜＞？・＿  '
-for (i = 0; i < han.length; i++) {
+for (let i = 0; i < han.length; i++) {
   kH[zen.charAt(i)] = han.charAt(i)
 }
 
@@ -706,20 +724,20 @@ kH['ヘ゜'] = 'ﾍﾟ'
 kH['ホ゜'] = 'ﾎﾟ'
 
 // 半角→全角変換用ハッシュ
-var kZ = new Object() // Objectの生成
+let kZ = new Object() // Objectの生成
 
-var zen2 =
+let zen2 =
   '０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ'
 zen2 +=
   'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンァィゥェォャュョッ、。゛゜「」［］（）／＊－ー＋，．：；！”＃＄％＆’＝～｜＾￥＠‘｛｝＜＞？・＿'
 
-var han2 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+let han2 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 han2 +=
   'ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜｦﾝｧｨｩｪｫｬｭｮｯ､｡ﾞﾟ｢｣[]()/*-ｰ+,.:;!"#$%&\'=~|^\\@`{}<>?･_'
 
 // 数字・アルファベット 半角かな
 
-for (var i = 0; i < han2.length; i++) {
+for (let i = 0; i < han2.length; i++) {
   kZ[han2.charAt(i)] = zen2.charAt(i)
 }
 
