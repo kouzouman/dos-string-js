@@ -64,3 +64,18 @@ test('changeDecimal', () => {
   console.log('123'.changeDecimal(4, 4, true))
   expect('123'.changeDecimal(4, 4, true)).toBe('123.0000')
 })
+
+/**
+ *  数値確認
+ */
+test('base64', () => {
+  const str = 'abcａｂｃアイウｴｵｶ123４５６'
+
+  const after = str.toBase64();
+  console.log(after)
+
+  const reverce = after.fromBase64();
+  console.log(reverce);
+
+  expect(str).toBe(reverce)
+})
